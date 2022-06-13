@@ -15,16 +15,12 @@ const App = () => {
 
     return (
         <div>
-            <span>{ (new Date).toString() }</span>
             <AppHeader />
             <SearchPanel />
             <TodoList todos={todoData}/>
         </div>
     );
 };
-
-
-
 
 
 //рендерим элемент App (совокупность всех элементов приложения) в div root в index.html
