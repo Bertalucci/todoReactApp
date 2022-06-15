@@ -1,33 +1,34 @@
-import React from "react";
+import React, {Component} from "react";
 import './todo-list-item.css'
 
-//label - свойство объекта (по сути филд)
 
-const TodoListItem = ({label, important = false}) => {
-    const style = {
-        color: important ? 'steelblue' : 'black',
-        fontWeight: important? 'bold' : 'normal'
-    };
+export default class TodoListItem extends Component {
 
-    return (
-        <span className="todo-list-item">
-      <span
-          className="todo-list-item-label"
-          style={style}>
-        {label}
-      </span>
+    render() {
+        const {label, important = false} = this.props;
+        const style = {
+            color: important ? 'steelblue' : 'black',
+            fontWeight: important? 'bold' : 'normal'
+        };
 
-      <button type="button"
-              className="btn btn-outline-success btn-sm float-right">
-        <i className="fa fa-exclamation" />
-      </button>
+        return (
+            <span className="todo-list-item">
+              <span
+                  className="todo-list-item-label"
+                  style={style}>
+                {label}
+              </span>
 
-      <button type="button"
-              className="btn btn-outline-danger btn-sm float-right">
-        <i className="fa fa-trash-o" />
-      </button>
-    </span>
-    );
-};
+              <button type="button"
+                      className="btn btn-outline-success btn-sm float-right">
+                <i className="fa fa-exclamation" />
+              </button>
 
-export default TodoListItem;
+              <button type="button"
+                      className="btn btn-outline-danger btn-sm float-right">
+                <i className="fa fa-trash-o" />
+              </button>
+            </span>
+        );
+    }
+}
