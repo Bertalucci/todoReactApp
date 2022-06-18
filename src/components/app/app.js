@@ -56,22 +56,30 @@ export default class App extends Component {
         });
     };
 
+    toggleProperty(arr, id, propName) {
+        const idx = arr.findIndex((el) => el.id === id);
+        const oldItem = arr[idx];
+        //копируем в newItem все свойства из oldItem, кроме done, кот. перезапишем
+        const newItem = {...oldItem, [propName]: !oldItem[propName]};
+        return [...arr.slice(0, idx), newItem, ...arr.slice(idx + 1)];
+    };
+
     //функция, регистрирующая important элемента
     onToggleImportant = (id) => {
-        console.log('Tog impor', id);
+        this.setState(({todoData}) => {
+
+            return {
+                todoData: this.toggleProperty(todoData, id, 'important')
+            };
+        });
     };
 
     //функция, регистрирующая done элемента
     onToggleDone = (id) => {
         this.setState(({todoData}) => {
-            const idx = todoData.findIndex((el) => el.id === id);
-            const oldItem = todoData[idx];
-            //копируем в newItem все свойства из oldItem, кроме done, кот. перезапишем
-            const newItem = {...oldItem, done: !oldItem.done};
-            const newArray = [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)];
 
             return {
-                todoData: newArray
+                todoData: this.toggleProperty(todoData, id, 'done')
             };
         });
     };
