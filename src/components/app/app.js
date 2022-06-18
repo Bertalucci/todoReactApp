@@ -50,6 +50,16 @@ export default class App extends Component {
         });
     };
 
+    //функция, регистрирующая important элемента
+    onToggleImportant = (id) => {
+        console.log('Tog impor', id);
+    };
+
+    //функция, регистрирующая done элемента
+    onToggleDone = (id) => {
+        console.log('Tog done', id);
+    };
+
     render() {
         return (
             <div className="todo-app">
@@ -61,7 +71,10 @@ export default class App extends Component {
 
                 <TodoList
                     todos={this.state.todoData}
-                    onDeleted={ this.deleteItem }/>
+                    onDeleted={ this.deleteItem }
+                    onToggleImportant={this.onToggleImportant}
+                    onToggleDone={this.onToggleDone}
+                />
 
                 <ItemAddForm onItemAdded = {this.addItem}/>
 
