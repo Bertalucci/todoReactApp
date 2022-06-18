@@ -12,11 +12,21 @@ export default class App extends Component {
 
     state = {
         todoData: [
-            {label: 'Drink Coffee', important: false, id: 1},
-            {label: 'Make App', important: true, id: 2},
-            {label: 'Have a lunch', important: false, id: 3}
+            this.createTodoItem('Make App'),
+            this.createTodoItem('Not to drink coffee'),
+            this.createTodoItem('Tomar mate')
         ]
     };
+
+    //функция создания нового айтема
+    createTodoItem(label) {
+        return {
+            label,
+            important: false,
+            done: false,
+            id: this.maxId++
+        }
+    }
 
     //функция удаления элемента
     deleteItem = (id) => {
@@ -33,11 +43,7 @@ export default class App extends Component {
 
     //функция добавления элемента
     addItem = (text) => {
-        const newItem = {
-            label: text,
-            important: false,
-            id: this.maxId++
-        };
+        const newItem = this.createTodoItem(text);
 
         this.setState(({todoData}) => {
             const newArr = [
@@ -57,13 +63,27 @@ export default class App extends Component {
 
     //функция, регистрирующая done элемента
     onToggleDone = (id) => {
-        console.log('Tog done', id);
+        this.setState(({todoData}) => {
+            const idx = todoData.findIndex((el) => el.id === id);
+            const oldItem = todoData[idx];
+            //копируем в newItem все свойства из oldItem, кроме done, кот. перезапишем
+            const newItem = {...oldItem, done: !oldItem.done};
+            const newArray = [...todoData.slice(0, idx), newItem, ...todoData.slice(idx + 1)];
+
+            return {
+                todoData: newArray
+            };
+        });
     };
 
+
     render() {
+        const doneCount = this.state.todoData.filter((el) => el.done).length;
+        const todoCount = this.state.todoData.length - doneCount;
+
         return (
             <div className="todo-app">
-                <AppHeader toDo={1} done={3} />
+                <AppHeader toDo={todoCount} done={doneCount} />
                 <div className="top-panel d-flex">
                     <SearchPanel />
                     <ItemStatusFilter />
