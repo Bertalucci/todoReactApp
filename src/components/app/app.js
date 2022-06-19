@@ -16,7 +16,8 @@ export default class App extends Component {
             this.createTodoItem('Not to drink coffee'),
             this.createTodoItem('Tomar mate')
         ],
-        term: ''
+        term: '',
+        filter: 'all' //all, active or done
     };
 
     //функция создания нового айтема
@@ -85,23 +86,43 @@ export default class App extends Component {
         });
     };
 
+    //поиск по айтемам
     search(items, term) {
         if (term.length === 0) {
             return items;
         }
 
         return items.filter((item) => {
-            return item.label.indexOf(term) > -1;
+            return item.label.toLowerCase()
+                .indexOf(term.toLowerCase()) > -1;
         });
+    }
+
+    //фильтр all, done or active
+    filter(items, filter) {
+        switch (filter) {
+            case 'all':
+                return items;
+            case 'active':
+                return items.filter((item) => !item.done);
+            case 'done':
+                return items.filter((item) => item.done);
+            default:
+                return items;
+        };
     }
 
     onSearchChange = (term) => {
         this.setState({term});
     }
 
+    onFilterChange = (filter) => {
+        this.setState({filter});
+    }
+
     render() {
-        const {todoData, term} = this.state;
-        const visibleItems = this.search(todoData, term);
+        const {todoData, term, filter} = this.state;
+        const visibleItems = this.filter(this.search(todoData, term), filter);
 
         const doneCount = this.state.todoData.filter((el) => el.done).length;
         const todoCount = this.state.todoData.length - doneCount;
@@ -113,7 +134,9 @@ export default class App extends Component {
                     <SearchPanel
                         onSearchChange={this.onSearchChange}
                     />
-                    <ItemStatusFilter />
+                    <ItemStatusFilter
+                        filter={filter}
+                        onFilterChange={this.onFilterChange}/>
                 </div>
 
                 <TodoList
